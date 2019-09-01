@@ -103,6 +103,7 @@ nav {
     
     img {
       width: 3rem;
+      margin-right: .5rem;
     }       
   }
   
@@ -120,6 +121,13 @@ nav {
     }
     
   
+  }
+}
+
+#root {
+  &.has-bg {
+    background-image: url(./assect/img/bg1.png);
+    background-size: cover;
   }
 }
 
@@ -157,6 +165,7 @@ nav {
 }
 
 footer {
+  position: relative;
   display: grid;
   grid-template-areas: 
   "qrCode tel email . . languages"
@@ -167,9 +176,11 @@ footer {
   padding: 1rem 7%;
   background: $primary-color;
   color: $primary-font-color;
-  
+
   .qr-code {
     grid-area: qrCode;
+    width: 3rem;
+    background: white;
   }
   
   .tel {
@@ -203,6 +214,18 @@ footer {
   
 }
 
+#root {
+  position: relative;
+  overflow: hidden; 
+  .bg2 {
+    position: absolute;
+    bottom: -6rem;
+    right: -8rem;
+    width: 40%
+  }
+}
+
+
 //home 
 .home {
   padding: 2.5rem 0 0 0;
@@ -214,7 +237,7 @@ footer {
   
   main {
     position: relative;
-    height: 73%;
+    height: 73vh;
     margin-left: 13%;
   }
   
@@ -223,10 +246,12 @@ footer {
     grid-template-areas: 
     "img h1"
     "img h2";
+    justify-content: center;
+    grid-column-gap: .5rem;
 
     img {
       grid-area: img;
-      width: 10rem;
+      width: 7.5rem;
     }
 
     h1 {

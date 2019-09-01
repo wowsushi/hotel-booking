@@ -1,10 +1,17 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Link, Switch, Route} from 'react-router-dom';
+import {Link, Switch, Route, withRouter} from 'react-router-dom';
 import axios from 'axios'
 
 import './App.scss';
+
+import Home from './component/Home.js'
+import qrCode from './assect/img/qrCode.png';
+import bg1 from './assect/img/bg1.png';
+import bg2 from './assect/img/bg2.png';
+import logo from './assect/img/logo.svg';
+
 
 axios.defaults.headers.common['Authorization'] = 'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu';
 const id ='3Elqe8kfMxdZv5xFLV4OUeN6jhmxIvQSTyj4eTgIowfIRvF4rerA2Nuegzc2Rgwu'
@@ -40,7 +47,7 @@ const Menu = props => {
       {routeAtHome || (
         <Link to="/">
           <div className="logo">
-            <img src="" alt="logo"/>
+            <img src={logo} alt="logo"/>
             <h1>綠柳宿旅</h1>
           </div>    
         </Link>
@@ -111,60 +118,6 @@ const Input = (props) => {
 
 }
 
-const Tag = props => {
-  return (
-    <aside className="aside">
-      <span></span>
-      <div className="tag">訂房</div>
-      <i class="fas fa-phone-volume"></i>
-      <i class="far fa-comments"></i>     
-    </aside>
-  )
-}
-
-class WelcomeBlock extends React.Component {  
-  render() { 
-    const { allRooms } = this.props
-    const roomPhotos = []
-
-    if (allRooms) {
-      allRooms.map((room, index) => {
-        roomPhotos.push(        
-          <div className="photo-block">
-            <Link to={`room/${room.id}`}>
-              <img 
-                src={room.imageUrl}
-                alt={room.name}
-                />
-              <div className="overlay"></div>
-              <div className="hover-content">
-                <h3>{room.name}</h3>
-                <p>{`$${room.normalDayPrice} ~ $${room.holidayPrice}`}</p>
-                <button>more<span></span></button>
-              </div>
-            </Link>
-          </div>
-        )
-      })
-    }
-
-    return (
-      <section className="col">
-        <header className="header header-home">
-          <img/>
-          <h1>綠柳宿旅</h1>
-          <h2>Green Willow Lodge</h2>
-        </header>
-        <div className="room-list">
-          <caption>客房介紹</caption>
-          {roomPhotos}
-        </div>
-      </section>
-    )
-  }
-
-} 
-
 const TopBar = props => {
   const { room, buttonName, linkTo } = props
   return (
@@ -181,7 +134,7 @@ const TopBar = props => {
 const Footer = props => {
   return (
     <footer>
-      <img className="qr-code" src="/" alt="qr-code"></img>
+      <img className="qr-code" src={qrCode} alt="qr-code"></img>
       <p className="tel">Tel： 02-24884712</p>
       <p className="fax">Fax： 02-84884712</p>
       <p className="email">Email： reloading.hotel@gmail.com</p>
@@ -196,22 +149,7 @@ const Footer = props => {
   )
 }
 
-class Home extends React.Component {
-  render () {
-    const {allRooms} = this.props
-    return (
-      <div className="home">
-        <Tag/>
-        <main>       
-          <WelcomeBlock
-            allRooms={allRooms}
-          />
-        </main>      
-      </div> 
-       
-    )
-  }
-}
+
 
 class RoomPage extends React.Component {
   constructor(props) {
@@ -302,13 +240,13 @@ class RoomPage extends React.Component {
     
     if (room.imageUrl) {
        imgList = room.imageUrl.map((image, index) => 
-          <img src={image} alt={`photo-${index}`} />
-        )
+       <img src={image} alt={`photo-${index}`} />
+       )
     }
-
+    
       
     return (
-        <main className="room-page">
+      <main className="room-page">
           <TopBar
             room={room}
             buttonName="預訂"
@@ -381,10 +319,10 @@ class BookingPage extends React.Component {
       .get(`${BASE_URL}/room/${id}`)
       .then(res => { 
         this.setState({room: res.data.room[0]})    
-    }).catch(err => console.log(err))
-  }
-  
-  render() {
+      }).catch(err => console.log(err))
+    }
+    
+    render() {
     const { room } = this. state
     if (!room.imageUrl) return null
     
@@ -538,11 +476,22 @@ class App extends React.Component {
     })
   }
   
+  setBG = () => {
+    if (this.props.location.pathname === "/") {
+      document.querySelector('#root').classList.add('has-bg')
+    } else {
+      document.querySelector('#root').classList.remove('has-bg')
+    }
+  }
+
   render() {
     const {allRooms} = this.state
     
+    this.setBG()
+
     return (
       <React.Fragment>
+        <img className="bg2" src={bg2} alt=""></img>
         <Route 
           path="/"
           render={props => (
@@ -626,4 +575,4 @@ class Test extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
