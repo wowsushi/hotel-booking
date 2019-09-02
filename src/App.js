@@ -1,14 +1,12 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Link, Switch, Route, withRouter} from 'react-router-dom';
+import {Link, Route, withRouter} from 'react-router-dom';
 import axios from 'axios'
 
 import './App.scss';
 
 import Home from './component/Home.js'
 import qrCode from './assect/img/qrCode.png';
-import bg1 from './assect/img/bg1.png';
 import bg2 from './assect/img/bg2.png';
 import logo from './assect/img/logo.svg';
 
@@ -102,8 +100,7 @@ const Input = (props) => {
           )  
         }
       }
-
-      
+ 
       return (
         <div className={`form-group ${props.id}`}>
           <label for={props.id}>{props.label}</label>
@@ -113,9 +110,10 @@ const Input = (props) => {
         </div>
       )
     }
+    default: {
+      console.log('error')
+    }
   }
-  
-
 }
 
 const TopBar = props => {
@@ -188,10 +186,10 @@ class RoomPage extends React.Component {
     roomInfo = (
       <ul>
         <li>床型：{bed[bedType]}</li>
-        <li>房客人數限制： {room.descriptionShort.GuestMin}~{room.descriptionShort.GuestMax} 人</li>
-        <li>衛浴數量：  {room.descriptionShort['Private-Bath']} 間</li>
-        <li>房間大小： {room.descriptionShort.Footage} 平方公尺</li>
-        <li>假日(五~日)價格： {room.holidayPrice}</li>
+        <li>房客人數限制：{room.descriptionShort.GuestMin}~{room.descriptionShort.GuestMax} 人</li>
+        <li>衛浴數量：{room.descriptionShort['Private-Bath']} 間</li>
+        <li>房間大小：{room.descriptionShort.Footage} 平方公尺</li>
+        <li>假日(五~日)價格：{room.holidayPrice}</li>
         <li>平日(一~四)價格：{room.normalDayPrice}</li>
       </ul>
     )
@@ -240,7 +238,7 @@ class RoomPage extends React.Component {
     
     if (room.imageUrl) {
        imgList = room.imageUrl.map((image, index) => 
-       <img src={image} alt={`photo-${index}`} />
+       <img src={image} alt={`room-${index}`} />
        )
     }
     
@@ -323,7 +321,7 @@ class BookingPage extends React.Component {
     }
     
     render() {
-    const { room } = this. state
+    const { room } = this.state
     if (!room.imageUrl) return null
     
     return (
@@ -464,7 +462,52 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state={
-      allRooms: ''
+      allRooms: '',
+      guest: {
+        adult: 0,
+        child: 0
+      },
+      bookedRoom: 0,
+      subtotal: 0,
+      form: {
+        startDate: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        endDate: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        lastName: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        firstName: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        title: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        phone: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        email: {
+          value: '',
+          valid: false,
+          error: ''
+        },
+        bookBreakfast: false,
+        bookRentalCar: false
+      }
     }
   }
   
@@ -532,43 +575,6 @@ class App extends React.Component {
             />
           )}
           />
-        <Footer/>       
-      </React.Fragment>
-    )
-  }
-}
-
-
-class Test extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state={
-      allRooms: ''
-    }
-  }
-  
-  componentDidMount() {
-    axios
-      .get(`${BASE_URL}/rooms`)
-      .then(res => { 
-        this.setState({allRooms: res.data.items})    
-    })
-  }
-  
-  render() {
-    const {allRooms} = this.state
-    
-    return (
-      <React.Fragment>
-        <Route 
-          path="/"
-          render={props => (
-            <Menu
-              routeProps={props}  
-            />
-          )}
-         />
-        <OrderCompletePage/>
         <Footer/>       
       </React.Fragment>
     )

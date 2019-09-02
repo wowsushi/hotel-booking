@@ -134,7 +134,7 @@ nav {
 .top-bar {
   grid-area: title;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   font-size: $font-size-lg;
   margin: 2rem 0;
@@ -505,9 +505,8 @@ footer {
         .start,
         .end {
           position: absolute;
-          top:  -1.5rem;
+          top:  -1.7rem;
           width: 3rem;
-          height: 1rem;
           background: white;
           border: 1px $primary-color solid;
           text-align: center;
