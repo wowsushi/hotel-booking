@@ -1,20 +1,7 @@
-
-import React from 'react';
+import React from 'react'
 import { Link } from 'react-router-dom';
 
-import logo from '../assect/img/logo.svg';
-
-
-const Tag = props => {
-  return (
-    <aside className="aside">
-      <span></span>
-      <div className="tag">訂房</div>
-      <i class="fas fa-phone-volume"></i>
-      <i class="far fa-comments"></i>     
-    </aside>
-  )
-}
+import logo from '../../../assect/img/logo.svg';
 
 const WelcomeBlock = ({allRooms}) => {  
   const roomPhotos = []
@@ -58,20 +45,4 @@ const WelcomeBlock = ({allRooms}) => {
 
 } 
 
-const Home  = props => {
-  const {allRooms} = props
-
-  return (
-    <div className="home">
-      <Tag/>
-      <main>       
-        <WelcomeBlock
-          allRooms={allRooms}
-        />
-      </main>      
-    </div> 
-      
-  )
-}
-
-export default Home;
+export default WelcomeBlock
