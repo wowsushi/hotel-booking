@@ -91,6 +91,17 @@ class RoomPage extends React.Component {
   
   render() {
     const { room } = this.state
+    const {
+      startValue,
+      endValue,
+      startOpen,
+      endOpen,
+      onStartOpenChange,
+      onEndOpenChange,
+      onStartChange,
+      onEndChange,
+      disabledStartDate,
+    } = this.props
     
     let imgList = ''
     
@@ -112,7 +123,17 @@ class RoomPage extends React.Component {
            {imgList}
           </section>
           <section className="booking-bar">
-            <Calendar/>          
+             <Calendar
+              startValue={startValue}
+              endValue={endValue}
+              startOpen={startOpen}
+              endOpen={endOpen}
+              onStartOpenChange={onStartOpenChange}
+              onEndOpenChange={onEndOpenChange}
+              onStartChange={onStartChange}
+              onEndChange={onEndChange}
+              disabledStartDate={disabledStartDate}
+             />          
              <Input 
               type="select"
               id="roomAmount"

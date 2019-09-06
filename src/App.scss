@@ -624,12 +624,12 @@ footer {
     position: relative;
     display: grid;
     grid-template-areas: 
-      "checking checking checkout des des"
-      "lastName firstName firstName title ."
-      "phone phone phone . ."
-      "email email email email ."
-      "extra extra extra extra extra";
-    grid-template-columns: 0.75fr 0.25fr 1fr 1fr 1fr;  
+      "checking checking checkout checkout des des"
+      "lastName firstName firstName firstName title ."
+      "phone phone phone phone. ."
+      "email email email email email ."
+      "extra extra extra extra extra extra";
+    grid-template-columns: 0.75fr 0.25fr 0.5fr 0.5fr 1fr 1fr;  
     align-items: center;
     grid-gap: 1rem 2.8rem;
     padding: 3rem 7.5rem;
@@ -694,6 +694,7 @@ footer {
     .des {
       grid-area: des;
       color: $secondary-color;
+      vertical-align: middle;
     }    
         
     .last-name {

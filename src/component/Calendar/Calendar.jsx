@@ -72,77 +72,43 @@ class Picker extends React.Component {
 }
 
 class Calendar extends React.Component {
-  state = {
-    startValue: null,
-    endValue: null,
-    startOpen: false,
-    endOpen: false,
-  };
-
-  onStartOpenChange = (startOpen) => {
-    this.setState({
-      startOpen,
-    });
-  }
-
-  onEndOpenChange = (endOpen) => {
-    this.setState({
-      endOpen,
-    });
-  }
-
-  onStartChange = (value) => {
-    this.setState({
-      startValue: value[0],
-      startOpen: false,
-      endOpen: true,
-    });
-  }
-
-  onEndChange = (value) => {
-    this.setState({
-      endValue: value[1],
-    });
-  }
-
-  disabledStartDate = (endValue) => {
-    if (!endValue) {
-      return false;
-    }
-    const startValue = this.state.startValue;
-    if (!startValue) {
-      return false;
-    }
-    return endValue.diff(startValue, 'days') < 0;
-  }
-
   render() {
-    console.log('state',this.state)
-    const state = this.state;
+    const {
+      startValue,
+      endValue,
+      startOpen,
+      endOpen,
+      onStartOpenChange,
+      onEndOpenChange,
+      onStartChange,
+      onEndChange,
+      disabledStartDate,
+    } = this.props
+
     return (
       <React.Fragment>
         <div className="form-group checking">
           <label>入住日期</label>
           <Picker
-            onOpenChange={this.onStartOpenChange}
+            onOpenChange={onStartOpenChange}
             type="start"
-            showValue={state.startValue}
-            open={this.state.startOpen}
-            value={[state.startValue, state.endValue]}
-            onChange={this.onStartChange}
+            showValue={startValue}
+            open={startOpen}
+            value={[startValue, endValue]}
+            onChange={onStartChange}
           />
         </div>
 
         <div className="form-group checkout">
           <label>退房日期</label>
           <Picker
-            onOpenChange={this.onEndOpenChange}
-            open={this.state.endOpen}
+            onOpenChange={onEndOpenChange}
+            open={endOpen}
             type="end"
-            showValue={state.endValue}
-            disabledDate={this.disabledStartDate}
-            value={[state.startValue, state.endValue]}
-            onChange={this.onEndChange}
+            showValue={endValue}
+            disabledDate={disabledStartDate}
+            value={[startValue, endValue]}
+            onChange={onEndChange}
           />
         </div>
       </React.Fragment>

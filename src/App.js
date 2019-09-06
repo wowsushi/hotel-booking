@@ -30,17 +30,11 @@ class App extends React.Component {
       },
       bookedRoom: 0,
       subtotal: 0,
+      startValue: null,
+      endValue: null,
+      startOpen: false,
+      endOpen: false,
       form: {
-        startDate: {
-          value: '',
-          valid: false,
-          error: ''
-        },
-        endDate: {
-          value: '',
-          valid: false,
-          error: ''
-        },
         lastName: {
           value: '',
           valid: false,
@@ -88,8 +82,51 @@ class App extends React.Component {
     }
   }
 
+  onStartOpenChange = (startOpen) => {
+    this.setState({
+      startOpen,
+    });
+  }
+
+  onEndOpenChange = (endOpen) => {
+    this.setState({
+      endOpen,
+    });
+  }
+
+  onStartChange = (value) => {
+    this.setState({
+      startValue: value[0],
+      startOpen: false,
+      endOpen: true,
+    });
+  }
+
+  onEndChange = (value) => {
+    this.setState({
+      endValue: value[1],
+    });
+  }
+
+  disabledStartDate = (endValue) => {
+    if (!endValue) {
+      return false;
+    }
+    const startValue = this.state.startValue;
+    if (!startValue) {
+      return false;
+    }
+    return endValue.diff(startValue, 'days') < 0;
+  }
+
   render() {
-    const {allRooms} = this.state
+    const {
+      allRooms,  
+      startValue,
+      endValue,
+      startOpen,
+      endOpen 
+    } = this.state
     
     this.setBG()
 
@@ -117,6 +154,15 @@ class App extends React.Component {
           render={(props) => (
             <RoomPage
               routeProps={props}
+              startValue={startValue}
+              endValue={endValue}
+              startOpen={startOpen}
+              endOpen={endOpen}
+              onStartOpenChange={this.onStartOpenChange}
+              onEndOpenChange={this.onEndOpenChange}
+              onStartChange={this.onStartChange}
+              onEndChange={this.onEndChange}
+              disabledStartDate={this.disabledStartDate}
             />
           )}
         />
@@ -125,7 +171,17 @@ class App extends React.Component {
           render={(props) => (
             <BookingPage
               routeProps={props}
-              />
+              routeProps={props}
+              startValue={startValue}
+              endValue={endValue}
+              startOpen={startOpen}
+              endOpen={endOpen}
+              onStartOpenChange={this.onStartOpenChange}
+              onEndOpenChange={this.onEndOpenChange}
+              onStartChange={this.onStartChange}
+              onEndChange={this.onEndChange}
+              disabledStartDate={this.disabledStartDate}
+            />
           )}
         />
         <Route 
