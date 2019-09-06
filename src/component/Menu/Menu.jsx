@@ -20,11 +20,11 @@ const Menu = props => {
       )}
      
       <ul className={`menu menu-${className}`}>
-          <li><Link to="/"><i class="fas fa-user-tie"></i>關於我們</Link></li>
-          <li><Link to="/"><i class="fas fa-bed"></i>客房介紹</Link></li>
-          <li><Link to="/"><i class="fas fa-wine-glass"></i>住宿服務</Link></li>
-          <li><Link to="/"><i class="fas fa-map-marked-alt"></i>交通指引</Link></li>
-          <li><Link to="/"><i class="far fa-newspaper"></i>最新消息</Link></li>
+          <li><Link to="/"><i className="fas fa-user-tie"></i>關於我們</Link></li>
+          <li><Link to="/"><i className="fas fa-bed"></i>客房介紹</Link></li>
+          <li><Link to="/"><i className="fas fa-wine-glass"></i>住宿服務</Link></li>
+          <li><Link to="/"><i className="fas fa-map-marked-alt"></i>交通指引</Link></li>
+          <li><Link to="/"><i className="far fa-newspaper"></i>最新消息</Link></li>
       </ul>  
     </nav>
   )

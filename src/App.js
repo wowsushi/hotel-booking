@@ -24,6 +24,7 @@ class App extends React.Component {
     super(props)
     this.state={
       allRooms: '',
+      selectedRoom: '',
       guest: {
         adult: 0,
         child: 0
@@ -82,6 +83,14 @@ class App extends React.Component {
     }
   }
 
+  getSelectedRoom = (id) => {
+    axios
+      .get(`${BASE_URL}/room/${id}`)
+      .then(res => { 
+        this.setState({selectedRoom: res.data.room[0]})    
+    }).catch(err => console.log(err))
+  }
+
   onStartOpenChange = (startOpen) => {
     this.setState({
       startOpen,
@@ -119,9 +128,22 @@ class App extends React.Component {
     return endValue.diff(startValue, 'days') < 0;
   }
 
+  getDiffStartEndDate = (startValue, endValue) => {
+    if (!startValue || !endValue) return
+    const msInDay = 1000 * 60 * 60 * 24
+    const diff = ( ( Date.parse(endValue) - Date.parse(startValue) ) ) / msInDay
+
+    return diff
+  }
+
+  getSubTotal = () => {
+
+  }
+
   render() {
     const {
-      allRooms,  
+      allRooms, 
+      selectedRoom, 
       startValue,
       endValue,
       startOpen,
@@ -129,7 +151,7 @@ class App extends React.Component {
     } = this.state
     
     this.setBG()
-
+    this.getDiffStartEndDate(startValue, endValue)
     return (
       <React.Fragment>
         <img className="bg2" src={bg2} alt=""></img>
@@ -154,6 +176,8 @@ class App extends React.Component {
           render={(props) => (
             <RoomPage
               routeProps={props}
+              getSelectedRoom={this.getSelectedRoom}
+              selectedRoom={selectedRoom}
               startValue={startValue}
               endValue={endValue}
               startOpen={startOpen}
@@ -171,7 +195,7 @@ class App extends React.Component {
           render={(props) => (
             <BookingPage
               routeProps={props}
-              routeProps={props}
+              selectedRoom={selectedRoom}
               startValue={startValue}
               endValue={endValue}
               startOpen={startOpen}

@@ -12,25 +12,9 @@ import { BASE_URL } from '../../constant'
 const fullFormat = 'YYYY年MM月DD日';
 
 class BookingPage extends React.Component {
-  constructor(props) {
-   super(props)
-   this.state={
-     room: ''
-   }
- }
- 
- componentDidMount() {
-   const id = this.props.routeProps.match.params.id
-   axios
-     .get(`${BASE_URL}/room/${id}`)
-     .then(res => { 
-       this.setState({room: res.data.room[0]})    
-     }).catch(err => console.log(err))
-   }
-   
    render() {
-   const { room } = this.state
    const {
+    selectedRoom,
     startValue,
     endValue,
     startOpen,
@@ -42,15 +26,15 @@ class BookingPage extends React.Component {
     disabledStartDate
    } = this.props
 
-   if (!room.imageUrl) return null
+   if (!selectedRoom.imageUrl) return null
 
    return (
      <main className="booking-page">
        <h2 className="title">訂單內容</h2>
        <section className="booking-banner">
-         <img src={room.imageUrl[0]} alt="room" className="banner-img"/>
+         <img src={selectedRoom.imageUrl[0]} alt="room" className="banner-img"/>
          <TopBar
-             room={room}
+             room={selectedRoom}
              buttonName="取消"
              linkTo="/"
          />
@@ -63,7 +47,7 @@ class BookingPage extends React.Component {
              <li><i class="fas fa-user"></i>入住人數：1人</li>
              <li><i class="fas fa-utensils"></i>不含早餐</li>
            </ul>
-           <p>{room.description}</p>
+           <p>{selectedRoom.description}</p>
          </div>
        </section>
        <section className="notice">

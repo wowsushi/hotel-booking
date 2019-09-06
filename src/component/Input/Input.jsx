@@ -34,14 +34,14 @@ const Input = (props) => {
           if (props.unit !== "人" && i === 0) continue
 
           options.push(
-            <option value={`${i}${props.unit}`} >{`${i}${props.unit}`}</option>
+            <option key={i} value={`${i}${props.unit}`} >{`${i}${props.unit}`}</option>
           )  
         }
       }
  
       return (
         <div className={`form-group ${props.id}`}>
-          <label for={props.id}>{props.label}</label>
+          <label htmlFor={props.id}>{props.label}</label>
           <select>
             {options}
           </select>

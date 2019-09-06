@@ -16,12 +16,8 @@ class RoomPage extends React.Component {
   }
   
   componentDidMount() {
-    const id = this.props.routeProps.match.params.id
-    axios
-      .get(`${BASE_URL}/room/${id}`)
-      .then(res => { 
-        this.setState({room: res.data.room[0]})    
-    }).catch(err => console.log(err))
+    console.log(this.props.routeProps.match.params.id)
+    this.props.getSelectedRoom(this.props.routeProps.match.params.id)
   }
   
   getAmenities = room => {
@@ -30,7 +26,7 @@ class RoomPage extends React.Component {
     let amenityList = []
     for (let [key, value] of Object.entries(room.amenities)) {
       amenityList.push(
-        <li>{amenities[key]}：{value? '有' : '無'}</li>
+        <li key={key}>{amenities[key]}：{value? '有' : '無'}</li>
       )
     }
     return amenityList;
@@ -90,8 +86,8 @@ class RoomPage extends React.Component {
   }
   
   render() {
-    const { room } = this.state
     const {
+      selectedRoom,
       startValue,
       endValue,
       startOpen,
@@ -105,9 +101,9 @@ class RoomPage extends React.Component {
     
     let imgList = ''
     
-    if (room.imageUrl) {
-       imgList = room.imageUrl.map((image, index) => 
-       <img src={image} alt={`room-${index}`} />
+    if (selectedRoom.imageUrl) {
+       imgList = selectedRoom.imageUrl.map((image, index) => 
+       <img key={index} src={image} alt={`room-${index}`} />
        )
     }
     
@@ -115,7 +111,7 @@ class RoomPage extends React.Component {
     return (
       <main className="room-page">
           <TopBar
-            room={room}
+            room={selectedRoom}
             buttonName="預訂"
             linkTo={`/booking/${this.props.routeProps.match.params.id}`}
           />
@@ -153,19 +149,19 @@ class RoomPage extends React.Component {
               unit="人"
             />           
           </section>
-          <section class="main-info">
+          <section className="main-info">
             <ul className="amenities">
-              {this.getAmenities(room)}
+              {this.getAmenities(selectedRoom)}
             </ul>
             <div className="subtotal">
               總價：NT 3200
             </div>
-            <p className="description">{room.description}</p>
+            <p className="description">{selectedRoom.description}</p>
             <aside className="room-info">
-              {this.getRoomInfo(room)}
+              {this.getRoomInfo(selectedRoom)}
             </aside>
             <div className="check-time">
-              {this.getCheckInAndOut(room)}
+              {this.getCheckInAndOut(selectedRoom)}
             </div>
           </section>
         </main>          
