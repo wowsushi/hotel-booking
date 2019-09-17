@@ -5,9 +5,6 @@ import React from 'react';
 import RangeCalendar from 'rc-calendar/lib/RangeCalendar';
 import DatePicker from 'rc-calendar/lib/Picker';
 
-import zhCN from 'rc-calendar/lib/locale/zh_CN';
-import enUS from 'rc-calendar/lib/locale/en_US';
-
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
@@ -15,14 +12,8 @@ import 'moment/locale/en-gb';
 const format = 'YYYY-MM-DD';
 
 const fullFormat = 'YYYY年MM月DD日';
-//const cn = location.search.indexOf('cn') !== -1;
 
 const now = moment();
-// if (cn) {
-//   now.locale('zh-cn').utcOffset(8);
-// } else {
-//   now.locale('en-gb').utcOffset(0);
-// }
 
 class Picker extends React.Component {
   state = {
@@ -42,7 +33,6 @@ class Picker extends React.Component {
         hoverValue={this.state.hoverValue}
         onHoverChange={this.onHoverChange}
         type={this.props.type}
-        // locale={cn ? zhCN : enUS}
         defaultValue={now}
         format={format}
         onChange={props.onChange}
@@ -62,7 +52,7 @@ class Picker extends React.Component {
                   placeholder="請選擇日期"
                   style={{ height: 40, paddingLeft: 8 }}
                   readOnly
-                  value={showValue && showValue.format(fullFormat) || ''}
+                  value={showValue? showValue.format(fullFormat) : ''}
                 />
             );
           }

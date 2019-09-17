@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 import logo from '../../../assect/img/logo.svg';
 
-const WelcomeBlock = ({allRooms}) => {  
+const WelcomeBlock = ({allRooms}) => {
   const roomPhotos = []
 
   if (allRooms) {
     allRooms.map((room, index) => {
-      roomPhotos.push(        
-        <div className="photo-block">
+      roomPhotos.push(
+        <div className="photo-block" key={room.id}>
           <Link to={`room/${room.id}`}>
-            <img 
+            <img
               src={room.imageUrl}
               alt={room.name}
               />
@@ -37,12 +37,12 @@ const WelcomeBlock = ({allRooms}) => {
         <h2>Green Willow Lodge</h2>
       </header>
       <div className="room-list">
-        <caption>客房介紹</caption>
+        <div className="title">客房介紹</div>
         {roomPhotos}
       </div>
     </section>
   )
 
-} 
+}
 
 export default WelcomeBlock

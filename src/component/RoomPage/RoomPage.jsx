@@ -1,11 +1,10 @@
 import React from 'react'
-import axios from 'axios'
 
 import Input from '../Input'
 import TopBar from '../TopBar'
 import Calendar from '../Calendar'
 
-import {BASE_URL, amenities, bed} from '../../constant'
+import { amenities, bed} from '../../constant'
 
 class RoomPage extends React.Component {
   constructor(props) {
@@ -14,16 +13,16 @@ class RoomPage extends React.Component {
       room: ''
     }
   }
-  
+
   componentDidMount() {
-    console.log(this.props.routeProps.match.params.id)
     this.props.getSelectedRoom(this.props.routeProps.match.params.id)
   }
-  
+
   getAmenities = room => {
    if (!room) return
 
     let amenityList = []
+    // eslint-disable-next-line
     for (let [key, value] of Object.entries(room.amenities)) {
       amenityList.push(
         <li key={key}>{amenities[key]}：{value? '有' : '無'}</li>
@@ -31,10 +30,10 @@ class RoomPage extends React.Component {
     }
     return amenityList;
   }
-  
+
   getRoomInfo = room => {
     if (!room) return
-    
+
     let roomInfo = []
     const bedType = room.descriptionShort.Bed[0]
     roomInfo = (
@@ -49,19 +48,19 @@ class RoomPage extends React.Component {
     )
     return roomInfo;
   }
-  
+
   getCheckInAndOut = room => {
     if (!room) return
     const {checkInEarly, checkInLate, checkOut} = room.checkInAndOut
     const checkInW =  ( +checkInLate.slice(0, 2) - +checkInEarly.slice(0, 2) ) / 24 * 100
     const checkInPos =  +checkInEarly.slice(0, 2) / 24 * 100
     const checkOutW = +checkOut.slice(0, 2) / 24 * 100
-    
+
     let root = document.documentElement;
     root.style.setProperty('--checkInW', checkInW + '%');
     root.style.setProperty('--checkOutW', checkOutW + '%');
      root.style.setProperty('--checkInPos', checkInPos + '%');
-    
+
     return (
       <React.Fragment>
         <div>
@@ -84,7 +83,7 @@ class RoomPage extends React.Component {
       </React.Fragment>
     )
   }
-  
+
   render() {
     const {
       selectedRoom,
@@ -98,16 +97,16 @@ class RoomPage extends React.Component {
       onEndChange,
       disabledStartDate,
     } = this.props
-    
+
     let imgList = ''
-    
+
     if (selectedRoom.imageUrl) {
-       imgList = selectedRoom.imageUrl.map((image, index) => 
+       imgList = selectedRoom.imageUrl.map((image, index) =>
        <img key={index} src={image} alt={`room-${index}`} />
        )
     }
-    
-      
+
+
     return (
       <main className="room-page">
           <TopBar
@@ -129,25 +128,25 @@ class RoomPage extends React.Component {
               onStartChange={onStartChange}
               onEndChange={onEndChange}
               disabledStartDate={disabledStartDate}
-             />          
-             <Input 
+             />
+             <Input
               type="select"
               id="roomAmount"
               label="客房"
               unit="間"
             />
-            <Input 
+            <Input
               type="select"
               id="adultAmount"
               label="成人"
               unit="人"
             />
-            <Input 
+            <Input
               type="select"
               id="childAmount"
               label="小孩"
               unit="人"
-            />           
+            />
           </section>
           <section className="main-info">
             <ul className="amenities">
@@ -164,7 +163,7 @@ class RoomPage extends React.Component {
               {this.getCheckInAndOut(selectedRoom)}
             </div>
           </section>
-        </main>          
+        </main>
     )
   }
 }

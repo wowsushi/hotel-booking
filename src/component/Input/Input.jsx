@@ -8,37 +8,37 @@ const Input = (props) => {
     case 'text': {
       return (
         <div className={`form-group ${props.id}`}>
-          <label for={props.id}>{props.label}</label>
+          <label htmlFor={props.id}>{props.label}</label>
           <input type={props.type} id={props.id} placeholder={props.placeholder} />
         </div>
-      )    
+      )
     }
     case 'checkbox': {
       return (
         <div className={`form-group ${props.id}`}>
           <input type={props.type} id={props.id} />
-          <label for={props.id}>{props.label}</label>   
+          <label htmlFor={props.id}>{props.label}</label>
         </div>
-      )    
+      )
     }
     case 'select': {
       let options = []
-      
+
       if (props.id === "title") {
         options.push(
-          <option value="ms" >女士</option>,
-          <option value="mr" >先生</option>
-        )  
+          <option key="ms" value="ms" >女士</option>,
+          <option key="mr" value="mr" >先生</option>
+        )
       } else {
         for (let i=0; i<10; i++) {
           if (props.unit !== "人" && i === 0) continue
 
           options.push(
             <option key={i} value={`${i}${props.unit}`} >{`${i}${props.unit}`}</option>
-          )  
+          )
         }
       }
- 
+
       return (
         <div className={`form-group ${props.id}`}>
           <label htmlFor={props.id}>{props.label}</label>

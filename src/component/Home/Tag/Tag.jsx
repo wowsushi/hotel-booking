@@ -5,8 +5,8 @@ const Tag = props => {
     <aside className="aside">
       <span></span>
       <div className="tag">訂房</div>
-      <i class="fas fa-phone-volume"></i>
-      <i class="far fa-comments"></i>     
+      <i className="fas fa-phone-volume"></i>
+      <i className="far fa-comments"></i>
     </aside>
   )
 }
