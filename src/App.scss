@@ -219,7 +219,8 @@ footer {
     position: absolute;
     bottom: -6rem;
     right: -8rem;
-    width: 40%
+    width: 40%;
+    z-index: -1;
   }
 }
 
@@ -695,11 +696,11 @@ footer {
       vertical-align: middle;
     }
 
-    .last-name {
+    .lastName {
       grid-area: lastName;
     }
 
-    .first-name {
+    .firstName {
       grid-area: firstName;
     }
 

@@ -60,8 +60,8 @@ class App extends React.Component {
           valid: false,
           error: ''
         },
-        bookBreakfast: false,
-        bookRentalCar: false
+        haveBreakfast: false,
+        haveRentalCar: false
       }
     }
   }
@@ -138,6 +138,8 @@ class App extends React.Component {
       startValue,
       endValue,
       bookedRoom,
+      haveBreakfast,
+      haveRentalCar,
       selectedRoom: {
         holidayPrice,
         normalDayPrice
@@ -155,6 +157,8 @@ class App extends React.Component {
       start += msInDay
     }
     subtotal *= bookedRoom
+    if (haveBreakfast) subtotal += 320
+    if (haveRentalCar) subtotal += 2500
 
     this.setState({ subtotal: this.convertToThousandth(subtotal) })
   }
@@ -163,18 +167,33 @@ class App extends React.Component {
     return num.toString().replace(/(\d{1,3})(?=(\d{3})+$)/g, "$1,")
   }
 
-  handleValueChange = type => e => {
-    const { guest } = this.state
+  handleValueChange = (field, value) => {
+    const { guest, form } = this.state
+    const newFieldObj =  this.validateCheck(field, value);
 
-    switch (type) {
+    if (!newFieldObj) return
+
+    switch (field) {
       case 'room':
-        this.setState({ bookedRoom: e.target.value})
+        this.setState({ bookedRoom: value})
+        break
+      case 'lastName':
+      case 'firstName':
+      case 'phone':
+      case 'address':
+      case 'email':
+        this.setState({
+          form: {
+            ...form,
+            [field]: newFieldObj
+          }
+        });
         break
       default:
         this.setState({
           guest: {
             ...guest,
-            [type]: e.target.value
+            [field]: value
           }
         })
         break
@@ -197,6 +216,47 @@ class App extends React.Component {
     return !(+adult + +child > GuestMax * bookedRoom)
             &&  !(+adult + +child < GuestMin * bookedRoom)
   }
+
+  validateCheck = (field, value) => {
+    const newFieldObj = {value, valid: true, error: ''};
+    console.log(field)
+    switch (field) {
+      case 'lastName': {
+        if (value.length === 0) {
+          newFieldObj.error = '請輸入姓氏（ 英文 ）';
+          newFieldObj.valid = false;
+        }
+        break;
+      }
+      case 'firstName': {
+        if (value.length === 0) {
+          newFieldObj.error = '請輸入姓名（ 英文 ）';
+          newFieldObj.valid = false;
+        }
+        break;
+      }
+      case 'phone': {
+        if (!value.match(/^09\d{8}$/)) {
+          newFieldObj.error = '手機號碼格式錯誤';
+          newFieldObj.valid = false;
+        }
+        break;
+      }
+      case 'email': {
+        if (!value.match(/^.*@.*\.com$/)) {
+          newFieldObj.error = 'Email格式錯誤';
+          newFieldObj.valid = false;
+        }
+        break;
+      }
+      default: {
+        console.log('no check item')
+      }
+    }
+    return newFieldObj
+  }
+
+
 
   render() {
 
@@ -255,6 +315,7 @@ class App extends React.Component {
               bookedRoom={bookedRoom}
               guest={guest}
               isGuestValid={this.isGuestValid}
+              convertToThousandth={this.convertToThousandth}
             />
           )}
         />
@@ -276,6 +337,7 @@ class App extends React.Component {
               getSubTotal={this.getSubTotal}
               subtotal={subtotal}
               guest={guest}
+              handleValueChange={this.handleValueChange}
             />
           )}
         />

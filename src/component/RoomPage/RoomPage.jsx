@@ -36,14 +36,15 @@ class RoomPage extends React.Component {
 
     let roomInfo = []
     const bedType = room.descriptionShort.Bed[0]
+
     roomInfo = (
       <ul>
         <li>床型：{bed[bedType]}</li>
         <li>房客人數限制：{room.descriptionShort.GuestMin}~{room.descriptionShort.GuestMax} 人</li>
         <li>衛浴數量：{room.descriptionShort['Private-Bath']} 間</li>
         <li>房間大小：{room.descriptionShort.Footage} 平方公尺</li>
-        <li>假日(五~日)價格：{room.holidayPrice}</li>
-        <li>平日(一~四)價格：{room.normalDayPrice}</li>
+        <li>假日(五~日)價格：{this.props.convertToThousandth(room.holidayPrice)}</li>
+        <li>平日(一~四)價格：{this.props.convertToThousandth(room.normalDayPrice)}</li>
       </ul>
     )
     return roomInfo;
@@ -100,7 +101,7 @@ class RoomPage extends React.Component {
       disabledStartDate,
       subtotal,
       handleValueChange,
-      isGuestValid
+      isGuestValid,
     } = this.props
 
     let imgList = ''
@@ -140,7 +141,7 @@ class RoomPage extends React.Component {
               id="roomAmount"
               label="客房"
               unit="間"
-              handleValueChange={handleValueChange('room')}
+              handleValueChange={e => handleValueChange('room', e.target.value)}
               value={bookedRoom}
             />
             <Input
@@ -148,7 +149,7 @@ class RoomPage extends React.Component {
               id="adultAmount"
               label="成人"
               unit="人"
-              handleValueChange={handleValueChange('adult')}
+              handleValueChange={e => handleValueChange('adult', e.target.value)}
               value={guest.adult}
             />
             <Input
@@ -156,7 +157,7 @@ class RoomPage extends React.Component {
               id="childAmount"
               label="小孩"
               unit="人"
-              handleValueChange={handleValueChange('child')}
+              handleValueChange={e => handleValueChange('child', e.target.value)}
               value={guest.child}
             />
           </section>

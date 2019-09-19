@@ -3,12 +3,15 @@ import { withRouter } from 'react-router-dom'
 
 class TopBar extends React.Component {
   handleSubmit = e => {
-    if (this.props.isGuestValid()) {
-      this.props.history.push(this.props.linkTo)
+    if (this.props.isGuestValid) {
+      if (this.props.isGuestValid()) {
+        this.props.history.push(this.props.linkTo)
+      } else {
+        alert('大人加小孩人數超過房間人數限制，或未選擇人數，請重新選擇人數。')
+      }
     } else {
-      alert('大人加小孩人數超過房間人數限制，或未選擇人數，請重新選擇人數。')
+      this.props.history.push(this.props.linkTo)
     }
-
   }
 
   render() {

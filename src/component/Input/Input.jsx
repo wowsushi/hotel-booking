@@ -1,7 +1,8 @@
 import React from 'react'
 
 const Input = (props) => {
-  switch (props.type) {
+  const { handleValueChange, type} = props
+  switch (type) {
     case 'date':
     case 'email':
     case 'phone':
@@ -9,7 +10,12 @@ const Input = (props) => {
       return (
         <div className={`form-group ${props.id}`}>
           <label htmlFor={props.id}>{props.label}</label>
-          <input type={props.type} id={props.id} placeholder={props.placeholder} />
+          <input
+            type={props.type}
+            id={props.id}
+            placeholder={props.placeholder}
+            onChange={e => handleValueChange(props.id, e.target.value)}
+          />
         </div>
       )
     }

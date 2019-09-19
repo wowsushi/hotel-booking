@@ -8,6 +8,10 @@ import Calander from '../Calendar'
 const fullFormat = 'YYYY年MM月DD日';
 
 class BookingPage extends React.Component {
+  handleSubmit = () => {
+
+  }
+
    render() {
    const {
     selectedRoom,
@@ -21,7 +25,8 @@ class BookingPage extends React.Component {
     onEndChange,
     disabledStartDate,
     subtotal,
-    guest
+    guest,
+    handleValueChange
    } = this.props
 
    if (!selectedRoom.imageUrl) return null
@@ -68,43 +73,48 @@ class BookingPage extends React.Component {
          <p className="des">歡迎您的蒞臨，誠摯為您服務2晚。</p>
          <Input
            type="text"
-           id="last-name"
+           id="lastName"
            label="姓氏(英文)"
            placeholder="例：Weng"
+           handleValueChange={handleValueChange}
          />
          <Input
            type="text"
-           id="first-name"
+           id="firstName"
            label="姓名(英文)"
            placeholder="例：Yuri-Han"
+           handleValueChange={handleValueChange}
          />
          <Input
            type="select"
            id="title"
            label="稱謂"
+           handleValueChange={handleValueChange}
            />
          <Input
            type="phone"
            id="phone"
            label="聯絡電話"
            placeholder="例：0932-123-123"
+           handleValueChange={handleValueChange}
          />
          <Input
            type="email"
            id="email"
            label="電子信箱"
            placeholder="小心不要打錯了，訂房確認函會寄到電子信箱喔"
+           handleValueChange={handleValueChange}
          />
          <div className="extra">
            <h4>額外加價服務</h4>
            <Input
              type="checkbox"
-             id="brackfast"
+             id="breakfast"
              label="早餐 $ 320 / 1人"
            />
            <Input
              type="checkbox"
-             id="rent-vent"
+             id="rentVent"
              label="租車旅遊 $ 2,500 / 1日"
            />
          </div>
