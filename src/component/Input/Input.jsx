@@ -34,15 +34,16 @@ const Input = (props) => {
           if (props.unit !== "人" && i === 0) continue
 
           options.push(
-            <option key={i} value={`${i}${props.unit}`} >{`${i}${props.unit}`}</option>
-          )
+            <option key={i} value={i}>{`${i}${props.unit}`}</option>
+            )
+          }
         }
-      }
+        const { handleValueChange } = props
 
       return (
         <div className={`form-group ${props.id}`}>
           <label htmlFor={props.id}>{props.label}</label>
-          <select>
+          <select onChange={handleValueChange}>
             {options}
           </select>
         </div>

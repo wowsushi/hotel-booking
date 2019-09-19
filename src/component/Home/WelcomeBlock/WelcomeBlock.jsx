@@ -37,7 +37,7 @@ const WelcomeBlock = ({allRooms}) => {
         <h2>Green Willow Lodge</h2>
       </header>
       <div className="room-list">
-        <div className="title">客房介紹</div>
+        <span className="title">客房介紹</span>
         {roomPhotos}
       </div>
     </section>

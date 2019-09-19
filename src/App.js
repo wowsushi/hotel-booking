@@ -13,9 +13,8 @@ import OrderCompletePage from './component/OrderCompletePage'
 import Menu from './component/Menu'
 import Footer from './component/Footer'
 
-import { BASE_URL } from './constant'
+import { BASE_URL , msInDay} from './constant'
 import bg2 from './assect/img/bg2.png';
-
 
 axios.defaults.headers.common['Authorization'] = 'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu';
 
@@ -29,7 +28,7 @@ class App extends React.Component {
         adult: 0,
         child: 0
       },
-      bookedRoom: 0,
+      bookedRoom: 1,
       subtotal: 0,
       startValue: null,
       endValue: null,
@@ -66,15 +65,15 @@ class App extends React.Component {
       }
     }
   }
-  
-  componentDidMount() {
+
+  componentWillMount() {
     axios
       .get(`${BASE_URL}/rooms`)
-      .then(res => { 
-        this.setState({allRooms: res.data.items})    
+      .then(res => {
+        this.setState({allRooms: res.data.items})
     })
   }
-  
+
   setBG = () => {
     if (this.props.location.pathname === "/") {
       document.querySelector('#root').classList.add('has-bg')
@@ -86,8 +85,8 @@ class App extends React.Component {
   getSelectedRoom = (id) => {
     axios
       .get(`${BASE_URL}/room/${id}`)
-      .then(res => { 
-        this.setState({selectedRoom: res.data.room[0]})    
+      .then(res => {
+        this.setState({selectedRoom: res.data.room[0]})
     }).catch(err => console.log(err))
   }
 
@@ -130,49 +129,112 @@ class App extends React.Component {
 
   getDiffStartEndDate = (startValue, endValue) => {
     if (!startValue || !endValue) return
-    const msInDay = 1000 * 60 * 60 * 24
-    const diff = ( ( Date.parse(endValue) - Date.parse(startValue) ) ) / msInDay
 
-    return diff
+    return ( ( Date.parse(endValue) - Date.parse(startValue) ) ) / msInDay
   }
 
   getSubTotal = () => {
+    const {
+      startValue,
+      endValue,
+      bookedRoom,
+      selectedRoom: {
+        holidayPrice,
+        normalDayPrice
+      }
+    } = this.state
+    const diff = this.getDiffStartEndDate(startValue, endValue)
 
+    let subtotal = 0
+    let start = Date.parse(startValue)
+
+    for (let i=0; i<diff; i++) {
+      (new Date(start).getDay() === 5 || new Date(start).getDay() === 6)
+      ? subtotal += holidayPrice
+      : subtotal += normalDayPrice
+      start += msInDay
+    }
+    subtotal *= bookedRoom
+
+    this.setState({ subtotal: this.convertToThousandth(subtotal) })
+  }
+
+  convertToThousandth = num => {
+    return num.toString().replace(/(\d{1,3})(?=(\d{3})+$)/g, "$1,")
+  }
+
+  handleValueChange = type => e => {
+    const { guest } = this.state
+
+    switch (type) {
+      case 'room':
+        this.setState({ bookedRoom: e.target.value})
+        break
+      default:
+        this.setState({
+          guest: {
+            ...guest,
+            [type]: e.target.value
+          }
+        })
+        break
+    }
+  }
+
+  isGuestValid = () => {
+    if (!this.state.selectedRoom) return null
+    const {
+      guest: {
+        adult,
+        child
+      },
+      bookedRoom
+    } = this.state
+    const GuestMax = this.state.selectedRoom.descriptionShort.GuestMax
+    const GuestMin = this.state.selectedRoom.descriptionShort.GuestMin
+
+    if (+adult === 0 && +child === 0) return false
+    return !(+adult + +child > GuestMax * bookedRoom)
+            &&  !(+adult + +child < GuestMin * bookedRoom)
   }
 
   render() {
+
     const {
-      allRooms, 
-      selectedRoom, 
+      allRooms,
+      selectedRoom,
+      bookedRoom,
+      guest,
       startValue,
       endValue,
       startOpen,
-      endOpen 
+      endOpen,
+      subtotal
     } = this.state
-    
+
     this.setBG()
-    this.getDiffStartEndDate(startValue, endValue)
+
     return (
       <React.Fragment>
         <img className="bg2" src={bg2} alt=""></img>
-        <Route 
+        <Route
           path="/"
           render={props => (
             <Menu
-              routeProps={props}  
+              routeProps={props}
             />
           )}
          />
-        <Route 
-          exact path="/" 
+        <Route
+          exact path="/"
           render={(props) => (
             <Home
               allRooms={allRooms}
             />
           )}
         />
-        <Route 
-          path="/room/:id" 
+        <Route
+          path="/room/:id"
           render={(props) => (
             <RoomPage
               routeProps={props}
@@ -187,11 +249,17 @@ class App extends React.Component {
               onStartChange={this.onStartChange}
               onEndChange={this.onEndChange}
               disabledStartDate={this.disabledStartDate}
+              getSubTotal={this.getSubTotal}
+              subtotal={subtotal}
+              handleValueChange={this.handleValueChange}
+              bookedRoom={bookedRoom}
+              guest={guest}
+              isGuestValid={this.isGuestValid}
             />
           )}
         />
-        <Route 
-          path="/booking/:id" 
+        <Route
+          path="/booking/:id"
           render={(props) => (
             <BookingPage
               routeProps={props}
@@ -205,18 +273,21 @@ class App extends React.Component {
               onStartChange={this.onStartChange}
               onEndChange={this.onEndChange}
               disabledStartDate={this.disabledStartDate}
+              getSubTotal={this.getSubTotal}
+              subtotal={subtotal}
+              guest={guest}
             />
           )}
         />
-        <Route 
-          path="/orderComplete" 
+        <Route
+          path="/orderComplete"
           render={(props) => (
             <OrderCompletePage
               routeProps={props}
             />
           )}
           />
-        <Footer/>       
+        <Footer/>
       </React.Fragment>
     )
   }

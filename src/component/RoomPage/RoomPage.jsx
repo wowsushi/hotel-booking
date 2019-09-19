@@ -87,6 +87,8 @@ class RoomPage extends React.Component {
   render() {
     const {
       selectedRoom,
+      bookedRoom,
+      guest,
       startValue,
       endValue,
       startOpen,
@@ -96,6 +98,9 @@ class RoomPage extends React.Component {
       onStartChange,
       onEndChange,
       disabledStartDate,
+      subtotal,
+      handleValueChange,
+      isGuestValid
     } = this.props
 
     let imgList = ''
@@ -106,13 +111,13 @@ class RoomPage extends React.Component {
        )
     }
 
-
     return (
       <main className="room-page">
           <TopBar
             room={selectedRoom}
             buttonName="預訂"
             linkTo={`/booking/${this.props.routeProps.match.params.id}`}
+            isGuestValid={isGuestValid}
           />
           <section className="photos-panel">
            {imgList}
@@ -128,24 +133,31 @@ class RoomPage extends React.Component {
               onStartChange={onStartChange}
               onEndChange={onEndChange}
               disabledStartDate={disabledStartDate}
+              getSubTotal={this.props.getSubTotal}
              />
              <Input
               type="select"
               id="roomAmount"
               label="客房"
               unit="間"
+              handleValueChange={handleValueChange('room')}
+              value={bookedRoom}
             />
             <Input
               type="select"
               id="adultAmount"
               label="成人"
               unit="人"
+              handleValueChange={handleValueChange('adult')}
+              value={guest.adult}
             />
             <Input
               type="select"
               id="childAmount"
               label="小孩"
               unit="人"
+              handleValueChange={handleValueChange('child')}
+              value={guest.child}
             />
           </section>
           <section className="main-info">
@@ -153,7 +165,7 @@ class RoomPage extends React.Component {
               {this.getAmenities(selectedRoom)}
             </ul>
             <div className="subtotal">
-              總價：NT 3200
+              總價：NT {subtotal}
             </div>
             <p className="description">{selectedRoom.description}</p>
             <aside className="room-info">

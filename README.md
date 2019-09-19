@@ -1,12 +1,12 @@
 # Hotel booking
-線上旅館訂房系統，目前只做出與房流程有關的功能，
+線上旅館訂房系統，目前只做出與訂房流程有關的功能，
 
 ## 使用技術
 - React
 - React Router
-- SASS
+- SCSS
 - Axios
-- rc-calenda 日曆插件
+- rc-calender 日曆插件
 - HTML5
 - JavaScript
 

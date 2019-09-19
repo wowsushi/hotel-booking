@@ -154,12 +154,10 @@ nav {
     color: $primary-color;
   }
 
-  a {
-   margin-left: auto;
-  }
   button {
     color: $white;
     background: $secondary-color;
+    margin-left: auto;
     padding: .5rem 1rem;
   }
 }

@@ -19,7 +19,9 @@ class BookingPage extends React.Component {
     onEndOpenChange,
     onStartChange,
     onEndChange,
-    disabledStartDate
+    disabledStartDate,
+    subtotal,
+    guest
    } = this.props
 
    if (!selectedRoom.imageUrl) return null
@@ -35,12 +37,12 @@ class BookingPage extends React.Component {
              linkTo="/"
          />
          <div className="content">
-           <h3>總價 NT 3200</h3>
+           <h3>總價 NT {subtotal}</h3>
            <ul>
              <li><i className="fas fa-calendar-alt"></i>入住日期：
               { startValue? startValue.format(fullFormat) : ''} ~ { endValue? endValue.format(fullFormat) : ''}
             </li>
-             <li><i className="fas fa-user"></i>入住人數：1人</li>
+             <li><i className="fas fa-user"></i>入住人數：大人 {guest.adult} 人，小孩 {guest.child} 人</li>
              <li><i className="fas fa-utensils"></i>不含早餐</li>
            </ul>
            <p>{selectedRoom.description}</p>
@@ -61,6 +63,7 @@ class BookingPage extends React.Component {
           onStartChange={onStartChange}
           onEndChange={onEndChange}
           disabledStartDate={disabledStartDate}
+          getSubTotal={this.props.getSubTotal}
          />
          <p className="des">歡迎您的蒞臨，誠摯為您服務2晚。</p>
          <Input

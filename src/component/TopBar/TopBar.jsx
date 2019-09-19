@@ -1,17 +1,26 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
-const TopBar = props => {
-  const { room, buttonName, linkTo } = props
-  return (
-    <section className="top-bar">
-      <span className="hot-tag">hot</span>
-      <h2>房型名稱：{room.name}</h2>
-      <Link to={linkTo}>
-        <button>{buttonName}</button>
-      </Link>
-    </section>
-  )
+class TopBar extends React.Component {
+  handleSubmit = e => {
+    if (this.props.isGuestValid()) {
+      this.props.history.push(this.props.linkTo)
+    } else {
+      alert('大人加小孩人數超過房間人數限制，或未選擇人數，請重新選擇人數。')
+    }
+
+  }
+
+  render() {
+    const { room, buttonName } = this.props
+    return (
+      <section className="top-bar">
+        <span className="hot-tag">hot</span>
+        <h2>房型名稱：{room.name}</h2>
+          <button onClick={this.handleSubmit}>{buttonName}</button>
+      </section>
+    )
+  }
 }
 
-export default TopBar
+export default withRouter(TopBar)
