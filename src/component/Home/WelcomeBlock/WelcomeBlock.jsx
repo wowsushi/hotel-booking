@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import logo from '../../../assect/img/logo.svg';
 
-const WelcomeBlock = ({allRooms}) => {
+const WelcomeBlock = ({allRooms, convertToThousandth}) => {
   const roomPhotos = []
 
   if (allRooms) {
@@ -18,7 +18,7 @@ const WelcomeBlock = ({allRooms}) => {
             <div className="overlay"></div>
             <div className="hover-content">
               <h3>{room.name}</h3>
-              <p>{`$${room.normalDayPrice} ~ $${room.holidayPrice}`}</p>
+              <p>{`$${convertToThousandth(room.normalDayPrice)} ~ $${convertToThousandth(room.holidayPrice)}`}</p>
               <button>more<span></span></button>
             </div>
           </Link>

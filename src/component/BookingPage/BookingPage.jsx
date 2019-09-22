@@ -1,19 +1,70 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import axios from 'axios'
 
 import Input from '../Input'
 import TopBar from '../TopBar'
-import Calander from '../Calendar'
-
-const fullFormat = 'YYYY年MM月DD日';
+import Calendar from '../Calendar'
+import { BASE_URL, fullFormat } from '../../constant'
 
 class BookingPage extends React.Component {
   handleSubmit = () => {
+    const { form, match, validateCheck } = this.props
+    let errorMsg = []
+    // eslint-disable-next-line
+    for (let obj in form) {
+      const currentObj = validateCheck( obj, form[obj].value)
+      if (!currentObj.valid) {
+      errorMsg.push(currentObj.error)
+      }
+    }
+    if (errorMsg.length > 0) {
+      alert(errorMsg.join('\n'))
+    } else {
+      let dates = this.props.getBookedDates()
+      let formData = new FormData()
+      formData.append('name', form.lastName.value)
+      formData.append('tel', form.phone.value)
+      for (let i = 0; i < dates.length; i++) {
+        formData.append(`date[${i}]`, dates[i] )
+      }
 
+      // axios({
+      //   method: 'post',
+      //   url: `${BASE_URL}/room/${match.params.id}`,
+      //   data: formData,
+      //   headers: {
+      //     'Authorization':'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu',
+      //     'Accept': 'application/json,'
+      //   }
+      // })
+      fetch(`${BASE_URL}/room/${match.params.id}`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization':'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu',
+          'Accept': 'application/json,'
+        }
+      })
+      .then(res => {
+        console.log('success')
+        return res.json()
+      }).then(jsonData => {
+        console.log(jsonData)
+        jsonData.success
+        ? this.props.history.replace('/orderComplete/success')
+        : this.props.history.replace('/orderComplete/fail')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
   }
+
 
    render() {
    const {
+    history,
     selectedRoom,
     startValue,
     endValue,
@@ -26,11 +77,17 @@ class BookingPage extends React.Component {
     disabledStartDate,
     subtotal,
     guest,
-    handleValueChange
+    handleValueChange,
+    form: {
+      haveBreakfast,
+      haveRentalCar
+    }
    } = this.props
 
-   if (!selectedRoom.imageUrl) return null
-
+   if (!selectedRoom) {
+     history.replace('/')
+     return null
+   }
    return (
      <main className="booking-page">
        <h2 className="title">訂單內容</h2>
@@ -48,7 +105,9 @@ class BookingPage extends React.Component {
               { startValue? startValue.format(fullFormat) : ''} ~ { endValue? endValue.format(fullFormat) : ''}
             </li>
              <li><i className="fas fa-user"></i>入住人數：大人 {guest.adult} 人，小孩 {guest.child} 人</li>
-             <li><i className="fas fa-utensils"></i>不含早餐</li>
+             <li><i className="fas fa-utensils"></i>
+              {haveBreakfast? '含早餐' : '不含早餐'}
+            </li>
            </ul>
            <p>{selectedRoom.description}</p>
          </div>
@@ -58,7 +117,7 @@ class BookingPage extends React.Component {
        </section>
        <form>
          <span className="tag">訂房資料</span>
-         <Calander
+         <Calendar
           startValue={startValue}
           endValue={endValue}
           startOpen={startOpen}
@@ -70,7 +129,6 @@ class BookingPage extends React.Component {
           disabledStartDate={disabledStartDate}
           getSubTotal={this.props.getSubTotal}
          />
-         <p className="des">歡迎您的蒞臨，誠摯為您服務2晚。</p>
          <Input
            type="text"
            id="lastName"
@@ -109,22 +167,24 @@ class BookingPage extends React.Component {
            <h4>額外加價服務</h4>
            <Input
              type="checkbox"
-             id="breakfast"
+             id="haveBreakfast"
              label="早餐 $ 320 / 1人"
+             haveBreakfast={haveBreakfast}
+             handleValueChange={handleValueChange}
            />
            <Input
              type="checkbox"
-             id="rentVent"
+             id="haveRentalCar"
              label="租車旅遊 $ 2,500 / 1日"
+             haveRentalCar={haveRentalCar}
+             handleValueChange={handleValueChange}
            />
          </div>
-         <Link to="/orderComplete">
-           <button>確認訂房</button>
-         </Link>
+           <button onClick={this.handleSubmit}>確認訂房</button>
        </form>
      </main>
    )
  }
 }
 
-export default BookingPage
+export default withRouter(BookingPage)

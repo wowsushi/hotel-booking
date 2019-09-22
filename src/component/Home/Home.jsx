@@ -5,18 +5,19 @@ import Tag from './Tag'
 import WelcomeBlock from './WelcomeBlock'
 
 const Home  = props => {
-  const {allRooms} = props
+  const {allRooms, convertToThousandth} = props
 
   return (
     <div className="home">
       <Tag/>
-      <main>       
+      <main>
         <WelcomeBlock
           allRooms={allRooms}
+          convertToThousandth={convertToThousandth}
         />
-      </main>      
-    </div> 
-      
+      </main>
+    </div>
+
   )
 }
 

@@ -22,7 +22,11 @@ const Input = (props) => {
     case 'checkbox': {
       return (
         <div className={`form-group ${props.id}`}>
-          <input type={props.type} id={props.id} />
+          <input
+            type={props.type}
+            id={props.id}
+            onChange={e => handleValueChange(props.id, e.target.checked)}
+          />
           <label htmlFor={props.id}>{props.label}</label>
         </div>
       )
@@ -32,8 +36,8 @@ const Input = (props) => {
 
       if (props.id === "title") {
         options.push(
-          <option key="ms" value="ms" >女士</option>,
-          <option key="mr" value="mr" >先生</option>
+          <option key="ms" value="女士" >女士</option>,
+          <option key="mr" value="先生" >先生</option>
         )
       } else {
         for (let i=0; i<10; i++) {

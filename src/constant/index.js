@@ -1,6 +1,7 @@
 export const id ='3Elqe8kfMxdZv5xFLV4OUeN6jhmxIvQSTyj4eTgIowfIRvF4rerA2Nuegzc2Rgwu'
 export const BASE_URL = 'https://challenge.thef2e.com/api/thef2e2019/stage6'
 export const msInDay = 1000 * 60 * 60 * 24
+export const fullFormat = 'YYYY年MM月DD日'
 export const amenities = {
   'Wi-Fi': 'Wi-Fi',
   'Breakfast': '早餐',

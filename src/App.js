@@ -2,6 +2,9 @@
 import React from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import axios from 'axios'
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+import 'moment/locale/en-gb';
 
 import './assect/css/normalize.css'
 import './App.scss';
@@ -16,6 +19,7 @@ import Footer from './component/Footer'
 import { BASE_URL , msInDay} from './constant'
 import bg2 from './assect/img/bg2.png';
 
+const now = moment()
 axios.defaults.headers.common['Authorization'] = 'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu';
 
 class App extends React.Component {
@@ -29,6 +33,7 @@ class App extends React.Component {
         child: 0
       },
       bookedRoom: 1,
+      bookedDates: [],
       subtotal: 0,
       startValue: null,
       endValue: null,
@@ -66,7 +71,7 @@ class App extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     axios
       .get(`${BASE_URL}/rooms`)
       .then(res => {
@@ -124,6 +129,15 @@ class App extends React.Component {
     if (!startValue) {
       return false;
     }
+
+    if (endValue.diff(now, 'days') > 90) {
+      return false;
+    }
+
+    if (startValue.diff(now, 'days') < 0) {
+      return false;
+    }
+
     return endValue.diff(startValue, 'days') < 0;
   }
 
@@ -133,13 +147,28 @@ class App extends React.Component {
     return ( ( Date.parse(endValue) - Date.parse(startValue) ) ) / msInDay
   }
 
+  getBookedDates = () => {
+    let { startValue, endValue } = this.state
+    const diff = this.getDiffStartEndDate(startValue, endValue)
+    const bookedDates = []
+
+    for (let i = 0; i <= diff; i++) {
+      let date = new Date(startValue)
+      bookedDates.push(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`)
+      startValue += msInDay
+    }
+    return bookedDates
+  }
+
   getSubTotal = () => {
     const {
       startValue,
       endValue,
       bookedRoom,
-      haveBreakfast,
-      haveRentalCar,
+      form: {
+        haveBreakfast,
+        haveRentalCar
+      },
       selectedRoom: {
         holidayPrice,
         normalDayPrice
@@ -189,6 +218,16 @@ class App extends React.Component {
           }
         });
         break
+      case 'haveBreakfast':
+      case 'haveRentalCar':
+        console.log(field, value)
+        this.setState({
+          form: {
+            ...form,
+            [field]: value
+          }
+        })
+        break
       default:
         this.setState({
           guest: {
@@ -219,7 +258,7 @@ class App extends React.Component {
 
   validateCheck = (field, value) => {
     const newFieldObj = {value, valid: true, error: ''};
-    console.log(field)
+
     switch (field) {
       case 'lastName': {
         if (value.length === 0) {
@@ -259,7 +298,6 @@ class App extends React.Component {
 
 
   render() {
-
     const {
       allRooms,
       selectedRoom,
@@ -269,9 +307,9 @@ class App extends React.Component {
       endValue,
       startOpen,
       endOpen,
-      subtotal
+      subtotal,
+      form
     } = this.state
-
     this.setBG()
 
     return (
@@ -290,6 +328,7 @@ class App extends React.Component {
           render={(props) => (
             <Home
               allRooms={allRooms}
+              convertToThousandth={this.convertToThousandth}
             />
           )}
         />
@@ -338,14 +377,23 @@ class App extends React.Component {
               subtotal={subtotal}
               guest={guest}
               handleValueChange={this.handleValueChange}
+              form={form}
+              validateCheck={this.validateCheck}
+              getBookedDates={this.getBookedDates}
             />
           )}
         />
         <Route
-          path="/orderComplete"
+          path="/orderComplete/:status"
           render={(props) => (
             <OrderCompletePage
               routeProps={props}
+              selectedRoom={selectedRoom}
+              startValue={startValue}
+              endValue={endValue}
+              guest={guest}
+              subtotal={subtotal}
+              form={form}
             />
           )}
           />

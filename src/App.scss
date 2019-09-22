@@ -782,9 +782,16 @@ footer {
       position: absolute;
       top: 2rem;
       left: -1px;
-      background: $secondary-color;
       color: $white;
       padding: .5rem 1rem;
+
+      &.success {
+        background: $secondary-color;
+      }
+
+      &.fail {
+        background: $warning;
+      }
     }
   }
 
@@ -833,7 +840,7 @@ footer {
       }
 
       a {
-        margin-left: auto;
+        justify-self: end;
       }
 
       button {
