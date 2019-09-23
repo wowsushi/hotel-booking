@@ -23,7 +23,7 @@
 https://wowsushi.github.io/hotel-booking/
 
 ## Demo
-![Demo](http://g.recordit.co/ToVuciQNRA.gif)
+![Demo](http://g.recordit.co/YK98RDwM7V.gif)
 
 ## 如何使用?
 ```
