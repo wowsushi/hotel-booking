@@ -62,7 +62,7 @@ class Picker extends React.Component {
 
 class Calendar extends React.Component {
   componentDidUpdate () {
-    setTimeout(() => this.props.getSubTotal(), 500)
+    //setTimeout(() => this.props.getSubTotal(), 500)
   }
 
   render() {

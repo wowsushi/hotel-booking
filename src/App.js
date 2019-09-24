@@ -19,7 +19,6 @@ import Footer from './component/Footer'
 import { BASE_URL , msInDay} from './constant'
 import bg2 from './assect/img/bg2.png';
 
-const now = moment()
 axios.defaults.headers.common['Authorization'] = 'Bearer qEyzXLEKxPOg751ZX4Klr7ahFxj4ggcnNjtLcT2142MCh7sAb3mshqLuiALu';
 
 class App extends React.Component {
@@ -122,6 +121,8 @@ class App extends React.Component {
   }
 
   disabledStartDate = (endValue) => {
+    const now = moment()
+
     if (!endValue) {
       return false;
     }
@@ -131,14 +132,14 @@ class App extends React.Component {
     }
 
     if (endValue.diff(now, 'days') > 90) {
-      return false;
+      return true;
     }
 
-    if (startValue.diff(now, 'days') < 0) {
-      return false;
+    if (endValue.valueOf() < now.valueOf()) {
+      return true;
     }
 
-    return endValue.diff(startValue, 'days') < 0;
+    return endValue.isBefore(startValue)
   }
 
   getDiffStartEndDate = (startValue, endValue) => {
