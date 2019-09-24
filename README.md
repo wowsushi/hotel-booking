@@ -7,7 +7,7 @@
 - SCSS
 - Axios
 - rc-calender 日曆插件
-- HTML5
+- HTML 5
 - JavaScript
 
 ## 功能
@@ -23,7 +23,9 @@
 https://wowsushi.github.io/hotel-booking/
 
 ## Demo
-???
+![Demo](http://g.recordit.co/TS1SyeL0cR.gif)
+![Demo](http://g.recordit.co/YK98RDwM7V.gif)
+
 
 ## 如何使用?
 ```
