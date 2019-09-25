@@ -135,10 +135,6 @@ class App extends React.Component {
       return true;
     }
 
-    if (endValue.valueOf() < now.valueOf()) {
-      return true;
-    }
-
     return endValue.isBefore(startValue)
   }
 
